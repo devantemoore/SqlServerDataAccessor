@@ -14,7 +14,7 @@ namespace SqlServerDataAccessor
         {
             Type type = typeof(T);
             var accessor = TypeAccessor.Create(type);
-            var members = accessor.GetMembers();
+            var members = accessor.GetMembers(); // test if a stack would be faster to search; can pop an item once its found
             var t = new T();
 
             for( int i = 0; i < reader.FieldCount; i++)
@@ -29,6 +29,24 @@ namespace SqlServerDataAccessor
                 }
             }
             return t;
+        }
+
+        public static void PrintObjects<T>(this List<T> list)
+        {
+            //var type = typeof(T);
+            //var props = type.GetProperties();
+            //foreach (var prop in props)
+            //{
+            //    Console.Write($"{prop.Name} \t");
+            //}
+            foreach (var item in list)
+            {
+                
+            }
+            //Console.WriteLine()
+
+
+
         }
 
         public static string FromSnakeCaseToPascalCase(this string text)
@@ -57,6 +75,23 @@ namespace SqlServerDataAccessor
                     continue;
                 }
                 sb.Append(c);
+            }
+            return sb.ToString();
+        }
+        public static string FromPascalToSnakeCase(this string text)
+        {
+            if (text == null) throw new ArgumentNullException(nameof(text));
+            var sb = new StringBuilder();
+            sb.Append(char.ToLowerInvariant(text[0]));
+           
+            for (int i = 1; i < text.Length; i++)
+            {
+                if (!char.IsUpper(text[i])) sb.Append(text[i]);
+                else
+                {
+                    sb.Append('_');
+                    sb.Append(char.ToLowerInvariant(text[i]));
+                }
             }
             return sb.ToString();
         }
